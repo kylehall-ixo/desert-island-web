@@ -4,16 +4,15 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- master
+  - master
 
 variables:
-
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: 'b30dbde2-e06b-40e0-b270-6ef4b30f747e'
 
   # Web app name
   webAppName: 'desert-island-app'
-  
+
   # Environment name
   environmentName: 'desert-island-app'
 
@@ -21,62 +20,62 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build
-  displayName: Build stage
-  jobs:  
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
+  - stage: Build
+    displayName: Build stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
 
-    steps:
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      artifact: drop
-
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(environmentName)
-    pool: 
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:            
-          - task: AzureResourceManagerTemplateDeployment@3
+        steps:
+          - task: ArchiveFiles@2
+            displayName: 'Archive files'
             inputs:
-            deploymentScope: 'Resource Group'
-            ConnectedServiceName: 'Microsoft Azure Enterprise (53e97d5b-9c1a-4b80-8e1c-99141d1495ae)-4880'
-            subscriptionName: '53e97d5b-9c1a-4b80-8e1c-99141d1495ae'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: 'desert-island'
-            location: 'Central US'
-            templateLocation: 'Linked artifact'
-            csmFile: 'deploy.json'
-            deploymentMode: 'Incremental'
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: desert-island-app'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              WebAppName: $(webAppName)
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              RuntimeStack: 'NODE|10.10'
-              StartupCommand: 'npm run start'
-              ScriptType: 'Inline Script'
-              InlineScript: |
-                npm install
-                npm run build --if-present
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+              replaceExistingArchive: true
+
+          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            artifact: drop
+
+  - stage: Deploy
+    displayName: Deploy stage
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        environment: $(environmentName)
+        pool:
+          vmImage: $(vmImageName)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    ConnectedServiceName: 'Microsoft Azure Enterprise (53e97d5b-9c1a-4b80-8e1c-99141d1495ae)-4880'
+                    subscriptionName: '53e97d5b-9c1a-4b80-8e1c-99141d1495ae'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'desert-island'
+                    location: 'Central US'
+                    templateLocation: 'Linked artifact'
+                    csmFile: 'deploy.json'
+                    deploymentMode: 'Incremental'
+                - task: AzureRmWebAppDeployment@4
+                  displayName: 'Azure App Service Deploy: desert-island-app'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    appType: webAppLinux
+                    WebAppName: $(webAppName)
+                    packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+                    RuntimeStack: 'NODE|10.10'
+                    StartupCommand: 'npm run start'
+                    ScriptType: 'Inline Script'
+                    InlineScript: |
+                      npm install
+                      npm run build --if-present
