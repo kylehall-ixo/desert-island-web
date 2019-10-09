@@ -56,6 +56,17 @@ stages:
       runOnce:
         deploy:
           steps:            
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+            deploymentScope: 'Resource Group'
+            ConnectedServiceName: 'Microsoft Azure Enterprise (53e97d5b-9c1a-4b80-8e1c-99141d1495ae)-4880'
+            subscriptionName: '53e97d5b-9c1a-4b80-8e1c-99141d1495ae'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: 'desert-island'
+            location: 'Central US'
+            templateLocation: 'Linked artifact'
+            csmFile: 'deploy.json'
+            deploymentMode: 'Incremental'
           - task: AzureRmWebAppDeployment@4
             displayName: 'Azure App Service Deploy: desert-island-app'
             inputs:
