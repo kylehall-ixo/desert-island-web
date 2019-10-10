@@ -79,7 +79,7 @@ stages:
                     resourceGroupName: 'desert-island'
                     location: 'Central US'
                     templateLocation: 'URL of the file'
-                    csmFile: './app/template.json'
+                    csmFileLink: './app/template.json'
                     deploymentMode: 'Incremental'
                 - task: AzureRmWebAppDeployment@4
                   displayName: 'Azure App Service Deploy: desert-island-app'
