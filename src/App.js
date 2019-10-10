@@ -21,9 +21,11 @@ appInsights.loadAppInsights()
 
 class App extends React.Component {
   render() {
-    <div>
-      <h1>Welcome the to the Big Desert Island project!</h1>
-    </div>
+    return (
+      <div>
+        <h1>Welcome the to the Big Desert Island project!</h1>
+      </div>
+    )
   }
 }
 
