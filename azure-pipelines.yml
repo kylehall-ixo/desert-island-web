@@ -64,7 +64,7 @@ stages:
                     resourceGroupName: 'desert-island'
                     location: 'Central US'
                     templateLocation: 'Linked artifact'
-                    csmFile: 'deploy.json'
+                    csmFile: 'template.json'
                     deploymentMode: 'Incremental'
                 - task: AzureRmWebAppDeployment@4
                   displayName: 'Azure App Service Deploy: desert-island-app'
