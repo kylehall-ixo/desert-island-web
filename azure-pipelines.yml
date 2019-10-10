@@ -65,8 +65,10 @@ stages:
                     targetType: 'inline'
                     script: |
                       # Write your commands here
-      
-                      pwd && ls
+                      echo 'printing working directory'
+                      pwd
+                      echo 'listing working directory contents'
+                      ls
 
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
