@@ -1,218 +1,179 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "sites_desert_island_app_name": {
-            "defaultValue": "desert-island-app",
-            "type": "String"
-        },
-        "serverfarms_ASP_desertisland_a77b_externalid": {
-            "defaultValue": "/subscriptions/53e97d5b-9c1a-4b80-8e1c-99141d1495ae/resourceGroups/desert-island/providers/Microsoft.Web/serverfarms/ASP-desertisland-a77b",
-            "type": "String"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sites_desert_island_app_name": {
+      "defaultValue": "desert-island-app",
+      "type": "String"
     },
-    "variables": {},
-    "resources": [
-        {
-            "type": "Microsoft.Web/sites",
-            "apiVersion": "2016-08-01",
-            "name": "[parameters('sites_desert_island_app_name')]",
-            "location": "Central US",
-            "tags": {
-                "g": ""
-            },
-            "kind": "app,linux",
-            "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_desert_island_app_name'), '.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "[concat(parameters('sites_desert_island_app_name'), '.scm.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[parameters('serverfarms_ASP_desertisland_a77b_externalid')]",
-                "reserved": true,
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": false,
-                "clientCertEnabled": false,
-                "hostNamesDisabled": false,
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false
-            }
+    "serverfarms_ASP_desertisland_a77b_externalid": {
+      "defaultValue": "/subscriptions/53e97d5b-9c1a-4b80-8e1c-99141d1495ae/resourceGroups/desert-island/providers/Microsoft.Web/serverfarms/ASP-desertisland-a77b",
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('sites_desert_island_app_name')]",
+      "location": "Central US",
+      "tags": {
+        "g": ""
+      },
+      "kind": "app,linux",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('sites_desert_island_app_name'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('sites_desert_island_app_name'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[parameters('serverfarms_ASP_desertisland_a77b_externalid')]",
+        "reserved": true,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('sites_desert_island_app_name'), '/web')]",
+      "location": "Central US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
+      ],
+      "tags": {
+        "g": ""
+      },
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php",
+          "hostingstart.html"
+        ],
+        "netFrameworkVersion": "v4.0",
+        "phpVersion": "",
+        "pythonVersion": "",
+        "nodeVersion": "",
+        "linuxFxVersion": "NODE|10.10",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "remoteDebuggingVersion": "VS2017",
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$desert-island-app",
+        "scmType": "VSTSRM",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": false,
+        "appCommandLine": "npm run start",
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": false,
+            "virtualDirectories": null
+          }
+        ],
+        "winAuthAdminState": 0,
+        "winAuthTenantState": 0,
+        "customAppPoolIdentityAdminState": false,
+        "customAppPoolIdentityTenantState": false,
+        "loadBalancing": "LeastRequests",
+        "routingRules": [],
+        "experiments": {
+          "rampUpRules": []
         },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2016-08-01",
-            "name": "[concat(parameters('sites_desert_island_app_name'), '/web')]",
-            "location": "Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
-            ],
-            "tags": {
-                "g": ""
-            },
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "phpVersion": "",
-                "pythonVersion": "",
-                "nodeVersion": "",
-                "linuxFxVersion": "NODE|10.10",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2017",
-                "httpLoggingEnabled": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$desert-island-app",
-                "scmType": "VSTSRM",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "appCommandLine": "npm run start",
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false,
-                        "virtualDirectories": null
-                    }
-                ],
-                "winAuthAdminState": 0,
-                "winAuthTenantState": 0,
-                "customAppPoolIdentityAdminState": false,
-                "customAppPoolIdentityTenantState": false,
-                "loadBalancing": "LeastRequests",
-                "routingRules": [],
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "autoHealEnabled": false,
-                "vnetName": "",
-                "siteAuthEnabled": false,
-                "siteAuthSettings": {
-                    "enabled": null,
-                    "unauthenticatedClientAction": null,
-                    "tokenStoreEnabled": null,
-                    "allowedExternalRedirectUrls": null,
-                    "defaultProvider": null,
-                    "clientId": null,
-                    "clientSecret": null,
-                    "clientSecretCertificateThumbprint": null,
-                    "issuer": null,
-                    "allowedAudiences": null,
-                    "additionalLoginParams": null,
-                    "isAadAutoProvisioned": false,
-                    "googleClientId": null,
-                    "googleClientSecret": null,
-                    "googleOAuthScopes": null,
-                    "facebookAppId": null,
-                    "facebookAppSecret": null,
-                    "facebookOAuthScopes": null,
-                    "twitterConsumerKey": null,
-                    "twitterConsumerSecret": null,
-                    "microsoftAccountClientId": null,
-                    "microsoftAccountClientSecret": null,
-                    "microsoftAccountOAuthScopes": null
-                },
-                "localMySqlEnabled": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "ftpsState": "AllAllowed",
-                "reservedInstanceCount": 0,
-                "fileChangeAuditEnabled": false
-            }
+        "autoHealEnabled": false,
+        "vnetName": "",
+        "siteAuthEnabled": false,
+        "siteAuthSettings": {
+          "enabled": null,
+          "unauthenticatedClientAction": null,
+          "tokenStoreEnabled": null,
+          "allowedExternalRedirectUrls": null,
+          "defaultProvider": null,
+          "clientId": null,
+          "clientSecret": null,
+          "clientSecretCertificateThumbprint": null,
+          "issuer": null,
+          "allowedAudiences": null,
+          "additionalLoginParams": null,
+          "isAadAutoProvisioned": false,
+          "googleClientId": null,
+          "googleClientSecret": null,
+          "googleOAuthScopes": null,
+          "facebookAppId": null,
+          "facebookAppSecret": null,
+          "facebookOAuthScopes": null,
+          "twitterConsumerKey": null,
+          "twitterConsumerSecret": null,
+          "microsoftAccountClientId": null,
+          "microsoftAccountClientSecret": null,
+          "microsoftAccountOAuthScopes": null
         },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2016-08-01",
-            "name": "[concat(parameters('sites_desert_island_app_name'), '/171570568986790')]",
-            "location": "Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
-            ],
-            "properties": {
-                "id": "171570568986790",
-                "status": 4,
-                "author": "Kyle Hall",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"Deployment\",\"commitId\":\"bc1c4eca4def9204a895af035fe4cde24dd80ef6\",\"buildId\":\"17\",\"buildNumber\":\"20191008.2\",\"repoProvider\":\"GitHub\",\"repoName\":\"kylehall-ixo/desert-island-web\",\"collectionUrl\":\"https://dev.azure.com/kyledhall/\",\"teamProject\":\"d5ded79e-183e-4b3c-8d26-32f78210e9c5\",\"buildProjectUrl\":\"https://dev.azure.com/kyledhall/d5ded79e-183e-4b3c-8d26-32f78210e9c5\",\"repositoryUrl\":\"https://github.com/kylehall-ixo/desert-island-web\",\"branch\":\"master\",\"teamProjectName\":\"Big Desert Island\",\"slotName\":\"production\"}",
-                "start_time": "2019-10-08T21:09:47.0398943Z",
-                "end_time": "2019-10-08T21:09:47.0398943Z",
-                "active": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2016-08-01",
-            "name": "[concat(parameters('sites_desert_island_app_name'), '/88fa4c57869b4fabba16e9c557d285a1')]",
-            "location": "Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
-            ],
-            "properties": {
-                "id": "88fa4c57869b4fabba16e9c557d285a1",
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2019-10-08T20:56:22.8342889Z",
-                "end_time": "2019-10-08T20:56:26.5971447Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2016-08-01",
-            "name": "[concat(parameters('sites_desert_island_app_name'), '/f0aa96adb0b44850bb30ab40a5998436')]",
-            "location": "Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
-            ],
-            "properties": {
-                "id": "f0aa96adb0b44850bb30ab40a5998436",
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2019-10-08T21:06:59.9835001Z",
-                "end_time": "2019-10-08T21:07:01.9394533Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2016-08-01",
-            "name": "[concat(parameters('sites_desert_island_app_name'), '/', parameters('sites_desert_island_app_name'), '.azurewebsites.net')]",
-            "location": "Central US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
-            ],
-            "properties": {
-                "siteName": "desert-island-app",
-                "hostNameType": "Verified"
-            }
-        }
-    ]
+        "localMySqlEnabled": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0,
+        "fileChangeAuditEnabled": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/deployments",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('sites_desert_island_app_name'), '/88fa4c57869b4fabba16e9c557d285a1')]",
+      "location": "Central US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
+      ],
+      "properties": {
+        "id": "88fa4c57869b4fabba16e9c557d285a1",
+        "status": 4,
+        "author_email": "N/A",
+        "author": "N/A",
+        "deployer": "VSTS_ZIP_DEPLOY",
+        "message": "Created via a push deployment",
+        "start_time": "2019-10-08T20:56:22.8342889Z",
+        "end_time": "2019-10-08T20:56:26.5971447Z",
+        "active": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2016-08-01",
+      "name": "[concat(parameters('sites_desert_island_app_name'), '/', parameters('sites_desert_island_app_name'), '.azurewebsites.net')]",
+      "location": "Central US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_desert_island_app_name'))]"
+      ],
+      "properties": {
+        "siteName": "desert-island-app",
+        "hostNameType": "Verified"
+      }
+    }
+  ]
 }
