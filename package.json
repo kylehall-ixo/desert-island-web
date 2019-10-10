@@ -22,17 +22,13 @@
     "parcel-bundler": "^1.12.3"
   },
   "dependencies": {
-    "@microsoft/applicationinsights-react-js": "^2.2.4",
-    "@microsoft/applicationinsights-web": "^2.2.4",
     "react": "^16.10.1",
     "react-dom": "^16.10.1"
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ],
+    "setupFilesAfterEnv": [ "<rootDir>/jest.setup.js" ],
     "transform": {
-      "^.+\\.js$": "babel-jest"
+    "^.+\\.js$": "babel-jest"
     }
   }
 }
